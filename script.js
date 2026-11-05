@@ -11,7 +11,9 @@ function show() {
   for (let i = 0; i < tasks.length; i++) {
     let li = document.createElement("li");
 
-    li.textContent = tasks[i].text;
+    let texto = document.createElement("span");
+    texto.textContent = tasks[i].text;
+    li.appendChild(texto);
 
     if (tasks[i].done) {
       li.classList.add("done");
@@ -24,8 +26,8 @@ function show() {
     };
 
     let btn = document.createElement("button");
-    btn.innerText = "x";
-
+    btn.textContent = "✕";
+    btn.title = "Remover tarefa";
     btn.onclick = function (e) {
       e.stopPropagation();
       tasks.splice(i, 1);
@@ -40,17 +42,23 @@ function show() {
 
 function add() {
   let input = document.getElementById("task");
+  let texto = input.value.trim();
 
-  if (input.value === "") return;
+  if (texto === "") return;
 
   tasks.push({
-    text: input.value,
+    text: texto,
     done: false
   });
 
   input.value = "";
+  input.focus();
   save();
   show();
 }
+
+document.getElementById("task").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") add();
+});
 
 show();
